@@ -17,7 +17,11 @@ if __name__ == "__main__":
     local_data_zzp = pd.DataFrame()
 
     for filename in tqdm(filenames):
-        sdata = SerializedData('raw_data/gzq_01.json')
+        try:
+            sdata = SerializedData(filename)
+        except (IndexError, json.JSONDecodeError) as e:
+            print(f"Error processing file {filename}: {str(e)}")
+            continue
 
         for i in range(20):
             if sdata.valid[i] == 0:
@@ -55,8 +59,9 @@ if __name__ == "__main__":
                 "gazeY": gazePos[start:end, 1]
             }
 
-            global_data_zzp = np.vstack([global_data_zzp, temp1]) if global_data_zzp.size else temp1
-            global_data_zzp = np.vstack([global_data_zzp, temp2]) if global_data_zzp.size else temp2
+            if sdata.valid[i] != 0:
+                global_data_zzp = np.vstack([global_data_zzp, temp1]) if global_data_zzp.size else temp1
+                global_data_zzp = np.vstack([global_data_zzp, temp2]) if global_data_zzp.size else temp2
 
             localGaze = sdata.fetch(i, "localGaze")
             localTarget = sdata.fetch(i, "localTarget")

@@ -78,12 +78,12 @@ X_train, X_test, y_train, y_test = split_train_test_data(gaze_points, target_poi
 
 # 参数设置
 input_size = 2
-hidden_size = 48
+hidden_size = 128
 output_size = 2
-num_layers = 2  # Transformer的层数
-batch_size = 100
-num_epochs = 100
-learning_rate = 0.001
+num_layers = 3
+batch_size = 64
+num_epochs = 200
+learning_rate = 0.0005
 
 # 创建训练集和测试集的数据集和数据加载器
 train_dataset = GazeDataset(X_train, y_train)
